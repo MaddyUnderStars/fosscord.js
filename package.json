@@ -2,11 +2,12 @@
 	"name": "fosscord.js",
 	"version": "1.0.0",
 	"description": "Discord.js Monkey-Patch to allow connections to Fosscord",
-	"main": "src/index.ts",
+	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
 		"example:ping": "npx ts-node example/ping.ts",
-		"prepare": "npm run build"
+		"prepare": "npm run build",
+		"preinstall": "npm run build"
 	},
 	"author": "MaddyUnderStars",
 	"license": "ISC",
@@ -19,6 +20,7 @@
 	"files": [
 		"src"
 	],
+	"types": "dist/index.d.ts",
 	"directories": {
 		"example": "example"
 	},
