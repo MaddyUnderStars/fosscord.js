@@ -4,7 +4,7 @@
 	"description": "Discord.js Monkey-Patch to allow connections to Fosscord",
 	"main": "dist/index.js",
 	"scripts": {
-		"build": "tsc",
+		"build": "npx tsc -b",
 		"example:ping": "npx ts-node example/ping.ts",
 		"prepare": "npm run build",
 		"preinstall": "npm run build"
