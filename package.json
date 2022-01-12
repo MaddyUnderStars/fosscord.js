@@ -1,13 +1,13 @@
 {
-	"name": "fosscord.js",
-	"version": "1.0.0",
+	"name": "fosscord-monkey.js",
+	"version": "1.0.3",
 	"description": "Discord.js Monkey-Patch to allow connections to Fosscord",
-	"main": "dist/index.js",
+	"main": "build/index.js",
+	"types": "build/index.d.ts",
 	"scripts": {
-		"build": "npx tsc -b",
+		"build": "tsc",
 		"example:ping": "npx ts-node example/ping.ts",
-		"prepare": "npm run build",
-		"preinstall": "npm run build"
+		"prepare": "npm run build"
 	},
 	"author": "MaddyUnderStars",
 	"license": "ISC",
@@ -18,12 +18,8 @@
 		"typescript": "^4.5.4"
 	},
 	"files": [
-		"src"
+		"build"
 	],
-	"types": "dist/index.d.ts",
-	"directories": {
-		"example": "example"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/MaddyUnderStars/fosscord.js.git"
