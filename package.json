@@ -1,6 +1,6 @@
 {
 	"name": "fosscord-monkey.js",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Discord.js Monkey-Patch to allow connections to Fosscord",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
