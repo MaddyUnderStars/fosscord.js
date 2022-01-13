@@ -1,4 +1,4 @@
-import Fosscord from "../src/index";
+import Fosscord from "../src/index"
 
 const client = new Fosscord.Client({
 	intents: [

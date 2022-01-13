@@ -1,2 +1,2 @@
-const Fosscord = require("./lib.js");
-module.exports = Fosscord;
+const Fosscord = require("./lib");
+module.exports = Fosscord.default;

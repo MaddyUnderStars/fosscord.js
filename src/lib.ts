@@ -64,12 +64,15 @@ Discord.MessagePayload.prototype.resolveData = function (): Discord.MessagePaylo
 		ret.data.message_reference.guild_id = message.guildId as string;
 	}
 
-	if ("embed" in ret.data) {
-		if (!ret.data.embed && ret.data?.embeds?.[0])
-			ret.data.embed = ret.data.embeds[0];
 
-		if (ret.data.embed && ret.data.embed.footer && !ret.data.embed.footer?.text)
-			delete ret.data.embed.footer;
+	if ("embeds" in ret.data && Array.isArray(ret.data.embeds)) {
+		for (var embed of ret.data.embeds) {
+			if (embed.footer && !embed.footer.text)
+				delete embed.footer;
+		}
+	
+		//@ts-ignore
+		ret.data.embed = ret.data.embeds?.shift();
 	}
 
 	this.data = ret.data;
