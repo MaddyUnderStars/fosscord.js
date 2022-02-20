@@ -3,7 +3,12 @@ import Fosscord from "../src/index"
 const client = new Fosscord.Client({
 	intents: [
 		Fosscord.Intents.FLAGS.GUILD_MESSAGES
-	]
+	],
+	http: {
+		api: 'https://slowcord.maddy.k.vu/api',
+		cdn: 'https://slowcord.maddy.k.vu',
+		invite: 'https://slowcord.maddy.k.vu',
+	}
 });
 
 client.on("ready", () => {
@@ -18,4 +23,4 @@ client.on("messageCreate", message => {
 	}
 });
 
-client.login(process.argv[1]);
+client.login(process.argv[2]);

@@ -11,7 +11,13 @@ Exactly as you would the standard Discord.js package, but instead just import th
 ```ts
 import Fosscord from "fosscord-monkey.js";
 const client = new Fosscord.Client({
-	intents: ["GUILD_MESSAGES"]
+	intents: ["GUILD_MESSAGES"],
+
+	// http: {		//New default endpoints
+	// 	api: 'https://dev.fosscord.com/api',
+	// 	cdn: 'https://cdn.fosscord.com',
+	// 	invite: 'https://fosscord.com',
+	// },
 });
 
 client.on("ready", () => {
@@ -22,7 +28,7 @@ client.on("messageCreate", (msg) => {
 	console.log(msg);
 })
 
-client.login("token here");
+client.login("token here");	//Token from instance
 ```
 
 # Examples

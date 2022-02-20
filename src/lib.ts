@@ -23,7 +23,6 @@ patch(Discord.Options, "createDefault", (result) => {
 			api: 'https://dev.fosscord.com/api',
 			cdn: 'https://cdn.fosscord.com',
 			invite: 'https://fosscord.com',
-			template: 'https://fosscord.new',
 		},
 	});
 });
@@ -79,4 +78,6 @@ Discord.MessagePayload.prototype.resolveData = function (): Discord.MessagePaylo
 	return ret;
 };
 
-export default Discord;
+export default {
+	...Discord,
+};
