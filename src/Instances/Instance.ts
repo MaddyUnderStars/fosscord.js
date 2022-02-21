@@ -42,6 +42,24 @@ class Instance extends EventEmitter {
 		return this.process;
 	};
 
+	kill = () => {
+		this.process?.removeListener("exit", this.__handleExit);
+		this.process?.kill();
+		this.__handleExit()
+	};
+
+	respawn = async (timeout?: number) => {
+		this.kill();
+		return this.spawn(timeout)
+	}
+
+	send = (message: any) => new Promise((resolve, reject) => {
+		this.process?.send(message, err => {
+			if (err) reject(err);
+			resolve(this);
+		})
+	})
+
 	__handleMessage = () => {
 
 	};

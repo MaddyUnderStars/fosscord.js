@@ -8,7 +8,7 @@ const client = new Fosscord.Client({
 });
 
 client.on("ready", () => {
-	console.log(`ready as ${client.user?.tag}`);
+	console.log(`ready as ${client.user?.tag}. ${client.instanced}`);
 });
 
 client.on("messageCreate", message => {

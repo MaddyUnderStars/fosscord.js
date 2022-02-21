@@ -47,12 +47,34 @@ class InstanceManager extends EventEmitter {
 					api: `https://${instance.baseUrl}/api`,
 					cdn: `https://${instance.baseUrl}/cdn`,
 					invite: `https://${instance.baseUrl}/invite`
-				}
+				};
 			}
 
 			const child = this.createChild(instance);
 			await child.spawn(timeout);
 		}
+	};
+
+	broadcast = async (message: any) => {
+		for (const child of this.children.values())
+			await child.send(message);
+	};
+
+	broadcastEval = async (script: string, options = {}) => {
+
+	};
+
+	fetchClientValues = (prop: string, instance: Instance) => {
+
+	};
+
+	respawnAll = async () => {
+		for (const child of this.children.values())
+			await child.respawn();
+	};
+
+	_performOnShards = (method: "eval" | "fetchClientValue", args: Array<any>, instance: Instance) => {
+
 	};
 };
 
