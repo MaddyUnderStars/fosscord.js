@@ -42,8 +42,11 @@ patch(Discord.WebSocketManager, "handlePacket", (func: Discord.WebSocketManager[
 			case "READY":
 				packet.d.application = packet.d.user;
 				break;
-			case "MESSAGE":
-				if (packet.d.components === null) delete packet.d.components;
+		}
+
+		for (var curr in packet.d) {
+			if (packet.d[curr] === null)
+				delete packet.d[curr];
 		}
 	}
 
@@ -63,15 +66,11 @@ Discord.MessagePayload.prototype.resolveData = function (): Discord.MessagePaylo
 		ret.data.message_reference.guild_id = message.guildId as string;
 	}
 
-
 	if ("embeds" in ret.data && Array.isArray(ret.data.embeds)) {
 		for (var embed of ret.data.embeds) {
 			if (embed.footer && !embed.footer.text)
 				delete embed.footer;
 		}
-	
-		//@ts-ignore
-		ret.data.embed = ret.data.embeds?.shift();
 	}
 
 	this.data = ret.data;
