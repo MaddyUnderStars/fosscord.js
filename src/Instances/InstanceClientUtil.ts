@@ -23,34 +23,19 @@ class InstanceClientUtil {
 		});
 	});
 
-	fetchClientValues = (prop: string, instance?: Instance) => new Promise((resolve, reject) => {
+	fetchClientValues = Discord.ShardClientUtil.prototype.fetchClientValues.bind(this);
 
-	});
+	broadcastEval = Discord.ShardClientUtil.prototype.broadcastEval.bind(this);
 
-	broadcastEval = (script: string, options = {}) => {
+	respawnAll = Discord.ShardClientUtil.prototype.respawnAll.bind(this);
 
-	};
+	//@ts-ignore
+	_handleMessage = Discord.ShardClientUtil.prototype._handleMessage.bind(this);
 
-	respawnAll = () => {
+	//@ts-ignore
+	_respond = Discord.ShardClientUtil.prototype._respond.bind(this);
 
-	};
-
-	_handleMessage = (message: any) => {
-		if (!message) return;
-
-	};
-
-	_respond = () => {
-
-	};
-
-	singleton = (client: Discord.Client) => {
-		if (!this._singleton)
-			this._singleton = new InstanceClientUtil(client);
-		else {
-			client.emit("warn", "Multiple clients created in child process for instancing");
-		}
-	};
+	singleton = Discord.ShardClientUtil.singleton.bind(this);
 }
 
 export default InstanceClientUtil;

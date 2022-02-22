@@ -10,6 +10,8 @@ class Instance extends EventEmitter {
 	env: { [key: string]: string | undefined; };
 	process?: childProcess.ChildProcess;
 	instance: InstanceOptions;
+	_evals = new Map<string, Promise<any>>();
+	_fetches = new Map<string, Promise<any>>();
 
 	constructor(manager: typeof InstanceManager.prototype, id: number, instance: InstanceOptions) {
 		super();
@@ -32,8 +34,8 @@ class Instance extends EventEmitter {
 
 	spawn = async (timeout: number = 30000) => {
 		this.process = childProcess.fork(path.resolve(this.manager.file), { env: this.env })
-			.on("message", this.__handleMessage.bind(this))
-			.on("exit", this.__handleExit);
+			.on("message", this._handleMessage.bind(this))
+			.on("exit", this._handleExit);
 
 		this.emit("spawn", this.process);
 
@@ -42,31 +44,30 @@ class Instance extends EventEmitter {
 		return this.process;
 	};
 
+	// spawn = (timeout?: number) => Discord.Shard.prototype.spawn.call(this, timeout);
+
 	kill = () => {
-		this.process?.removeListener("exit", this.__handleExit);
+		this.process?.removeListener("exit", this._handleExit);
 		this.process?.kill();
-		this.__handleExit()
+		this._handleExit();
 	};
 
 	respawn = async (timeout?: number) => {
 		this.kill();
-		return this.spawn(timeout)
-	}
-
-	send = (message: any) => new Promise((resolve, reject) => {
-		this.process?.send(message, err => {
-			if (err) reject(err);
-			resolve(this);
-		})
-	})
-
-	__handleMessage = () => {
-
+		return this.spawn(timeout);
 	};
 
-	__handleExit = () => {
+	send = Discord.Shard.prototype.send.bind(this);
 
-	};
+	fetchClientValue = Discord.Shard.prototype.fetchClientValue.bind(this);
+
+	eval = Discord.Shard.prototype.eval.bind(this);
+
+	//@ts-ignore
+	_handleMessage = Discord.Shard.prototype._handleMessage.bind(this);
+
+	//@ts-ignore
+	_handleExit = Discord.Shard.prototype._handleExit.bind(this);
 };
 
 export default Instance;

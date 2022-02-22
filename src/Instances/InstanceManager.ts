@@ -16,10 +16,17 @@ export interface InstanceManagerOptions {
 	instances: Array<InstanceOptions>;
 }
 
+export type BroadcastEvalOptions = {
+	context: any;
+	instance: number;
+};
+
 class InstanceManager extends EventEmitter {
 	options: InstanceManagerOptions;
-	children: Discord.Collection<number, typeof Instance.prototype>;
+	shards: Discord.Collection<number, typeof Instance.prototype>;
+	shardList = "auto";
 	file: string;
+	mode = "process";
 
 	constructor(file: string, options: InstanceManagerOptions) {
 		super();
@@ -30,12 +37,12 @@ class InstanceManager extends EventEmitter {
 		if (!options.instances.length) throw new Error("List of instances cannot be empty");
 
 		this.options = options;
-		this.children = new Discord.Collection;
+		this.shards = new Discord.Collection;
 	}
 
-	createChild = (options: InstanceOptions, id = this.children.size) => {
+	createChild = (options: InstanceOptions, id = this.shards.size) => {
 		const child = new Instance(this, id, options);
-		this.children.set(id, child);
+		this.shards.set(id, child);
 		this.emit("childCreate", child);
 		return child;
 	};
@@ -55,27 +62,37 @@ class InstanceManager extends EventEmitter {
 		}
 	};
 
-	broadcast = async (message: any) => {
-		for (const child of this.children.values())
-			await child.send(message);
+	broadcast = Discord.ShardingManager.prototype.broadcast.bind(this);
+
+	broadcastEval = (script: Function, options: BroadcastEvalOptions) => {
+		const discordoptions = {
+			context: options.context,
+			shard: options.instance,
+		};
+
+		//@ts-ignore
+		return Discord.ShardingManager.prototype.broadcastEval.call(this, script, discordoptions);
 	};
 
-	broadcastEval = async (script: string, options = {}) => {
+	fetchClientValues = Discord.ShardingManager.prototype.fetchClientValues.bind(this);
 
+	respawnAll = ({ instanceDelay = 5000, respawnDelay = 500, timeout = 30000 } = {}) => {
+		return Discord.ShardingManager.prototype.respawnAll.call(this, {
+			shardDelay: instanceDelay,
+			respawnDelay,
+			timeout,
+		});
 	};
 
-	fetchClientValues = (prop: string, instance: Instance) => {
+	//@ts-ignore
+	// _performOnShards = Discord.ShardingManager.prototype._performOnShards.bind(this);
 
-	};
-
-	respawnAll = async () => {
-		for (const child of this.children.values())
-			await child.respawn();
-	};
-
-	_performOnShards = (method: "eval" | "fetchClientValue", args: Array<any>, instance: Instance) => {
-
-	};
+	_performOnShards = (method: string, args: Array<any>, shard?: number) => {
+		const promises = [];
+		//@ts-ignore
+		for (const sh of this.shards.values()) promises.push(sh[method](...args));
+		return Promise.all(promises);
+	}
 };
 
 export default InstanceManager;
