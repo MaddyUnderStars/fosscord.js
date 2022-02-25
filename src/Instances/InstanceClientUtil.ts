@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import Fosscord from "../index";
 import Instance from "./Instance";
 
 class InstanceClientUtil {
@@ -36,6 +37,13 @@ class InstanceClientUtil {
 	_respond = Discord.ShardClientUtil.prototype._respond.bind(this);
 
 	singleton = Discord.ShardClientUtil.singleton.bind(this);
+
+	instanceIdsForGuildId = async (id: Discord.Snowflake) => {
+		const resp = await this.broadcastEval(async (client, { id }) => {
+			return client.guilds.cache.find((x) => x.id === id);
+		}, { context: { id } }) as Discord.Guild[];
+		return resp.map((x, i) => !!x ? i : null).filter(x => x !== undefined);
+	};
 }
 
 export default InstanceClientUtil;

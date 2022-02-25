@@ -73,7 +73,8 @@ if (client.instanced) {		//Similar to client.shard
 	client.instanced.respawnAll();
 	client.instanced.respawn();
 	client.instanced.send(message);
-	//shardidForGuildId has no equivalent right now.
+
+	await client.instanced.instanceIdsForGuildId(message.guild.id);	//returns array of instance IDs that found that guild
 }
 
 //INSTANCE_TOKEN is set by InstanceMananger for this process.
