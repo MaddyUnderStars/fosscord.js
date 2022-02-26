@@ -42,7 +42,9 @@ class InstanceClientUtil {
 	instanceIdsForGuildId = async (id: Discord.Snowflake): Promise<{ guild: typeof Fosscord.Guild.prototype, childId: number, instanceId: string; }[]> => {
 		const resp = await this.broadcastEval((c, { id }) => {
 			const client = c as typeof Fosscord.Client.prototype;
+			//@ts-ignore
 			if (!client.instanced) throw new Error("this cannot be possible lol");
+			//@ts-ignore
 			return { guild: client.guilds.cache.find((x) => x.id === id), childId: client.instanced.client_id, instanceId: client.instanced.id };
 		}, { context: { id } }) as { guild: typeof Fosscord.Guild.prototype, childId: number, instanceId: string; }[];
 		return resp.filter(x => !!x.guild);
@@ -51,7 +53,9 @@ class InstanceClientUtil {
 	instanceIdsForUserId = async (id: Discord.Snowflake): Promise<{ user: typeof Fosscord.User.prototype, childId: number, instanceId: string; }[]> => {
 		const resp = await this.broadcastEval((c, { id }) => {
 			const client = c as typeof Fosscord.Client.prototype;
+			//@ts-ignore
 			if (!client.instanced) throw new Error("this cannot be possible lol");
+			//@ts-ignore
 			return { user: client.users.cache.find((x) => x.id === id), childId: client.instanced.client_id, instanceId: client.instanced.id };
 		}, { context: { id } }) as { user: typeof Fosscord.User.prototype, childId: number, instanceId: string; }[];
 		return resp.filter(x => !!x.user);

@@ -78,11 +78,12 @@ Discord.MessagePayload.prototype.resolveData = function (): Discord.MessagePaylo
 	return ret;
 };
 
-class Client extends Discord.Client {
+export class Client extends Discord.Client {
 	instanced = process.env.INSTANCE_MANAGER ? new InstanceClientUtil(this) : null;
-}
+};
+// Object.assign(Discord, { Client });
 
 export default {
 	...Discord,
-	Client,
+	Client
 };

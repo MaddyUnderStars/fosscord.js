@@ -23,4 +23,4 @@ client.on("messageCreate", message => {
 	}
 });
 
-client.login(process.argv[2]);
+client.login("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk0NDM5NjY1OTExNzI5NzY4OSIsImlhdCI6MTY0NTQ0OTgwMH0.ybd4mAMyM6AQjluMZl_4zXKtyALh7-nC_0d41eTy4q4");
