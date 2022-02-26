@@ -74,7 +74,9 @@ if (client.instanced) {		//Similar to client.shard
 	client.instanced.respawn();
 	client.instanced.send(message);
 
-	await client.instanced.instanceIdsForGuildId(message.guild.id);	//returns array of instance IDs that found that guild
+	await client.instanced.instanceIdsForGuildId(message.guild.id);	//returns guild, child id and instance id ( currently instance baseUrl )
+	await client.instanced.instanceIdsForUserId(message.user.id);	//see above
+
 }
 
 //INSTANCE_TOKEN is set by InstanceMananger for this process.

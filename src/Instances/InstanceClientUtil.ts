@@ -1,12 +1,13 @@
 import Discord from "discord.js";
 import Fosscord from "../index";
-import Instance from "./Instance";
 
 class InstanceClientUtil {
-	client: Discord.Client;
+	client: typeof Fosscord.Client.prototype;
 	_singleton?: InstanceClientUtil;
+	id = new URL(process.env.INSTANCE_API_ENDPOINT as string).hostname;
+	client_id = parseInt(process.env.INSTANCE_CHILD_ID as string);
 
-	constructor(client: Discord.Client) {
+	constructor(client: typeof Fosscord.Client.prototype) {
 		this.client = client;
 
 		if (!process.send) throw new Error("not child process?");
@@ -33,16 +34,27 @@ class InstanceClientUtil {
 	//@ts-ignore
 	_handleMessage = Discord.ShardClientUtil.prototype._handleMessage.bind(this);
 
-	//@ts-ignore
+	// @ts-ignore
 	_respond = Discord.ShardClientUtil.prototype._respond.bind(this);
 
 	singleton = Discord.ShardClientUtil.singleton.bind(this);
 
-	instanceIdsForGuildId = async (id: Discord.Snowflake) => {
-		const resp = await this.broadcastEval(async (client, { id }) => {
-			return client.guilds.cache.find((x) => x.id === id);
-		}, { context: { id } }) as Discord.Guild[];
-		return resp.map((x, i) => !!x ? i : null).filter(x => x !== undefined);
+	instanceIdsForGuildId = async (id: Discord.Snowflake): Promise<{ guild: typeof Fosscord.Guild.prototype, childId: number, instanceId: string; }[]> => {
+		const resp = await this.broadcastEval((c, { id }) => {
+			const client = c as typeof Fosscord.Client.prototype;
+			if (!client.instanced) throw new Error("this cannot be possible lol");
+			return { guild: client.guilds.cache.find((x) => x.id === id), childId: client.instanced.client_id, instanceId: client.instanced.id };
+		}, { context: { id } }) as { guild: typeof Fosscord.Guild.prototype, childId: number, instanceId: string; }[];
+		return resp.filter(x => !!x.guild);
+	};
+
+	instanceIdsForUserId = async (id: Discord.Snowflake): Promise<{ user: typeof Fosscord.User.prototype, childId: number, instanceId: string; }[]> => {
+		const resp = await this.broadcastEval((c, { id }) => {
+			const client = c as typeof Fosscord.Client.prototype;
+			if (!client.instanced) throw new Error("this cannot be possible lol");
+			return { user: client.users.cache.find((x) => x.id === id), childId: client.instanced.client_id, instanceId: client.instanced.id };
+		}, { context: { id } }) as { user: typeof Fosscord.User.prototype, childId: number, instanceId: string; }[];
+		return resp.filter(x => !!x.user);
 	};
 }
 

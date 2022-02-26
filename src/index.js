@@ -3,3 +3,4 @@ module.exports = require("./lib").default;
 
 module.exports.Instance = require("./Instances/Instance").default;
 module.exports.InstanceManager = require("./Instances/InstanceManager").default;
+module.exports.InstanceClientUtil = require("./Instances/InstanceClientUtil").default;

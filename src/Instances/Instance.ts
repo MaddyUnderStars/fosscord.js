@@ -5,7 +5,7 @@ import Discord from "discord.js";
 import InstanceManager, { InstanceOptions } from "./InstanceManager";
 
 class Instance extends EventEmitter {
-	manager: typeof InstanceManager.prototype;
+	manager: InstanceManager;
 	id: number;
 	env: { [key: string]: string | undefined; };
 	process?: childProcess.ChildProcess;
@@ -22,7 +22,7 @@ class Instance extends EventEmitter {
 
 		this.env = Object.assign({}, process.env, {
 			INSTANCE_MANAGER: true,
-			INSTANCES: this.id,
+			INSTANCE_CHILD_ID: this.id,
 			INSTANCE_COUNT: this.manager.options.instances.length,
 			INSTANCE_TOKEN: instance.token,
 

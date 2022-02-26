@@ -11,9 +11,9 @@ export type InstanceOptions = {
 
 export interface InstanceManagerOptions {
 	respawn?: boolean;
-	childArgs?: Array<string>;
-	execArgs?: Array<string>;
-	instances: Array<InstanceOptions>;
+	childArgs?: string[];
+	execArgs?: string[];
+	instances: InstanceOptions[];
 }
 
 export type BroadcastEvalOptions = {
@@ -23,7 +23,7 @@ export type BroadcastEvalOptions = {
 
 class InstanceManager extends EventEmitter {
 	options: InstanceManagerOptions;
-	shards: Discord.Collection<number, typeof Instance.prototype>;
+	shards: Discord.Collection<number, Instance>;
 	shardList = "auto";
 	file: string;
 	mode = "process";
@@ -87,7 +87,7 @@ class InstanceManager extends EventEmitter {
 	//@ts-ignore
 	// _performOnShards = Discord.ShardingManager.prototype._performOnShards.bind(this);
 
-	_performOnShards = (method: string, args: Array<any>, shard?: number) => {
+	_performOnShards = (method: string, args: any[], shard?: number) => {
 		const promises = [];
 		//@ts-ignore
 		for (const sh of this.shards.values()) promises.push(sh[method](...args));
