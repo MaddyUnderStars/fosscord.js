@@ -1,4 +1,5 @@
 import Discord from 'discord.js';
+import InstanceClientUtil from "./Instances/InstanceClientUtil";
 
 interface patchFunction {
 	(result: any, ...any: any[]): any;
@@ -20,9 +21,9 @@ patch(Discord.Options, "createDefault", (result) => {
 		http: {
 			agent: {},
 			version: 9,
-			api: 'https://dev.fosscord.com/api',
-			cdn: 'https://cdn.fosscord.com',
-			invite: 'https://fosscord.com',
+			api: process.env.INSTANCE_API_ENDPOINT || 'https://dev.fosscord.com/api',
+			cdn: process.env.INSTANCE_CDN_ENDPOINT || 'https://cdn.fosscord.com',
+			invite: process.env.INSTANCE_INVITE_ENDPOINT || 'https://fosscord.com/invite',
 		},
 	});
 });
@@ -77,6 +78,11 @@ Discord.MessagePayload.prototype.resolveData = function (): Discord.MessagePaylo
 	return ret;
 };
 
+class Client extends Discord.Client {
+	instanced = process.env.INSTANCE_MANAGER ? new InstanceClientUtil(this) : null;
+}
+
 export default {
 	...Discord,
+	Client,
 };

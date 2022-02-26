@@ -1,3 +1,6 @@
 //Hack to export everything rather than exporting default object with everything
-const Fosscord = require("./lib");
-module.exports = Fosscord.default;
+module.exports = require("./lib").default;
+
+module.exports.Instance = require("./Instances/Instance").default;
+module.exports.InstanceManager = require("./Instances/InstanceManager").default;
+module.exports.InstanceClientUtil = require("./Instances/InstanceClientUtil").default;
